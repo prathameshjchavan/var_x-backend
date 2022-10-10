@@ -4,16 +4,17 @@
   "info": {
     "singularName": "variant",
     "pluralName": "variants",
-    "displayName": "Variant"
+    "displayName": "Variant",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
     "size": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "color": {
       "type": "string",
@@ -29,15 +30,15 @@
     },
     "style": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "images": {
-      "allowedTypes": [
-        "images"
-      ],
       "type": "media",
       "multiple": true,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "product": {
       "type": "relation",
