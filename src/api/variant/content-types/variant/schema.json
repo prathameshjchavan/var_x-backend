@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": false
+    "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
@@ -45,6 +45,16 @@
       "relation": "manyToOne",
       "target": "api::product.product",
       "inversedBy": "variants"
+    },
+    "colorLabel": {
+      "type": "enumeration",
+      "enum": [
+        "black",
+        "white",
+        "green",
+        "red",
+        "tan"
+      ]
     }
   }
 }
