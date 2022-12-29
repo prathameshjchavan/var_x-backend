@@ -25,20 +25,33 @@ module.exports = (plugin) => {
       locations: newLocations,
     };
 
-    await strapi
+    const response = await strapi
       .query("plugin::users-permissions.user")
       .update({
+        select: [
+          "id",
+          "name",
+          "username",
+          "email",
+          "provider",
+          "confirmed",
+          "blocked",
+          "createdAt",
+          "updatedAt",
+          "paymentMethods",
+          "contactInfo",
+          "locations",
+        ],
         where: { id },
         data: updatedData,
-      })
-      .then((res) => {
-        ctx.response.status = 200;
       });
+
+    return response;
   };
 
   plugin.routes["content-api"].routes.push({
     method: "PUT",
-    path: "/user/set-settings",
+    path: "/user/settings",
     handler: "user.setSettings",
     config: {
       prefix: "",
