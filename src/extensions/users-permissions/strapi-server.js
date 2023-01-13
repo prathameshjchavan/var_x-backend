@@ -12,12 +12,22 @@ module.exports = (plugin) => {
 
     if (typeof details !== "undefined" && typeof detailSlot !== "undefined") {
       newInfo[detailSlot] = details;
+    } else if (
+      typeof details === "undefined" &&
+      typeof detailSlot !== "undefined"
+    ) {
+      newInfo[detailSlot] = { name: "", email: "", phone: "" };
     }
     if (
       typeof location !== "undefined" &&
       typeof locationSlot !== "undefined"
     ) {
       newLocations[locationSlot] = location;
+    } else if (
+      typeof location === "undefined" &&
+      typeof locationSlot !== "undefined"
+    ) {
+      newLocations[locationSlot] = { street: "", zip: "", city: "", state: "" };
     }
 
     const updatedData = {
