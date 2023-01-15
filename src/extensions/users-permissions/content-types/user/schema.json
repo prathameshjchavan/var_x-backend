@@ -76,6 +76,12 @@
       "type": "string",
       "required": true,
       "minLength": 3
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "users_permissions_user"
     }
   }
 }
