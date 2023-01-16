@@ -24,7 +24,6 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
     let orderCustomer;
     let serverTotal = 0;
     let unavailable = [];
-    let invalid = false;
 
     if (ctx.state.user) {
       orderCustomer = ctx.state.user.id;
@@ -78,7 +77,28 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       shippingValid === undefined ||
       (serverTotal * 1.075 + shippingValid.price).toFixed(2) !== total
     ) {
-      // invalid cart
+      ctx.send({ error: "Invalid Cart" }, 400);
+    } else if (unavailable.length > 0) {
+      ctx.send({ unavailable }, 409);
+    } else {
+      const order = await strapi.service("api::order.order").create({
+        shippingAddress,
+        billingAddres,
+        shippingInfo,
+        billingInfo,
+        shippingOption,
+        subtotal,
+        tax,
+        total,
+        items,
+        user: orderCustomer,
+      });
+
+      if (order.user.name === "Guest") {
+        order.user = { name: "Guest" };
+      }
+
+      ctx.send({ order }, 200);
     }
   },
 }));
