@@ -1,5 +1,3 @@
-// path: ./src/api/restaurant/routes/custom-restaurant.js
-
 module.exports = {
   routes: [
     {

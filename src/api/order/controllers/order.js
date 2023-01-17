@@ -12,7 +12,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
   async place(ctx) {
     const {
       shippingAddress,
-      billingAddres,
+      billingAddress,
       shippingInfo,
       billingInfo,
       shippingOption,
@@ -33,22 +33,27 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
 
     await Promise.all(
       items.map(async (clientItem) => {
-        const serverItem = await strapi
-          .service("api::order.order")
-          .findOne({ id: clientItem.variant.id });
-
+        const serverItem = await strapi.entityService.findOne(
+          "api::variant.variant",
+          clientItem.variant.strapi_id
+        );
         if (serverItem.quantity < clientItem.qty) {
-          unavailable.push({ id: serverItem.id, qty: serverItem.quantity });
-        } else {
-          serverTotal += serverItem.price * clientItem.qty;
-
-          await strapi
-            .service("api::variant.variant")
-            .update(
-              { id: clientItem.variant.id },
-              { quantity: serverItem.quantity - clientItem.qty }
-            );
+          unavailable.push({
+            id: clientItem.variant.id,
+            qty: serverItem.quantity,
+          });
         }
+        serverTotal += serverItem.price * clientItem.qty;
+
+        await strapi.entityService.update(
+          "api::variant.variant",
+          clientItem.variant.strapi_id,
+          {
+            data: {
+              quantity: serverItem.quantity - clientItem.qty,
+            },
+          }
+        );
       })
     );
 
@@ -77,28 +82,29 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       shippingValid === undefined ||
       (serverTotal * 1.075 + shippingValid.price).toFixed(2) !== total
     ) {
-      ctx.send({ error: "Invalid Cart" }, 400);
+      return ctx.badRequest("", { error: "Invalid Cart" });
     } else if (unavailable.length > 0) {
-      ctx.send({ unavailable }, 409);
+      return ctx.conflict("", { unavailable });
     } else {
-      const order = await strapi.service("api::order.order").create({
-        shippingAddress,
-        billingAddres,
-        shippingInfo,
-        billingInfo,
-        shippingOption,
-        subtotal,
-        tax,
-        total,
-        items,
-        user: orderCustomer,
+      let order = await strapi.entityService.create("api::order.order", {
+        data: {
+          shippingAddress,
+          billingAddress,
+          shippingInfo,
+          billingInfo,
+          shippingOption,
+          subtotal,
+          tax,
+          total,
+          items,
+          user: orderCustomer,
+        },
+        populate: "user",
       });
 
-      if (order.user.name === "Guest") {
-        order.user = { name: "Guest" };
-      }
+      order = await this.sanitizeOutput(order, ctx);
 
-      ctx.send({ order }, 200);
+      return this.transformResponse(order);
     }
   },
 }));
