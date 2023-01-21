@@ -8,5 +8,13 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: "POST",
+      path: "/orders/process",
+      handler: "order.process",
+      config: {
+        policies: [],
+      },
+    },
   ],
 };

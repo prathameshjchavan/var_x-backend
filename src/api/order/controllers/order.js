@@ -84,7 +84,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       items,
       total,
       shippingOption,
-      itempotencyKey,
+      idempotencyKey,
       storedIntent,
       email,
     } = ctx.request.body;
@@ -141,7 +141,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
           {
             amount: total * 100,
           },
-          { itempotencyKey }
+          { idempotencyKey }
         );
 
         return this.transformResponse({
@@ -156,8 +156,13 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
             customer: ctx.state.user ? ctx.state.user.stripeID : undefined,
             receipt_email: email,
           },
-          { itempotencyKey }
+          { idempotencyKey }
         );
+
+        return this.transformResponse({
+          client_secret: intent.client_secret,
+          intentID: intent.id,
+        });
       }
     }
   },
