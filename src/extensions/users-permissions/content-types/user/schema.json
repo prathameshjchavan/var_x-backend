@@ -82,6 +82,9 @@
       "relation": "oneToMany",
       "target": "api::order.order",
       "mappedBy": "user"
+    },
+    "stripeID": {
+      "type": "string"
     }
   }
 }

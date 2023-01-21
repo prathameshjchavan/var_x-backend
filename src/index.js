@@ -1,4 +1,6 @@
-'use strict';
+"use strict";
+
+const stripe = require("stripe")(process.env.STRIPE_SK);
 
 module.exports = {
   /**
@@ -16,5 +18,19 @@ module.exports = {
    * This gives you an opportunity to set up your data model,
    * run jobs, or perform some special logic.
    */
-  bootstrap(/*{ strapi }*/) {},
+  bootstrap({ strapi }) {
+    strapi.db.lifecycles.subscribe({
+      models: ["plugin::users-permissions.user"],
+      beforeCreate: async (event) => {
+        const { data } = event.params;
+
+        const customer = await stripe.customers.create({
+          name: data.name,
+          email: data.email,
+        });
+
+        data.stripeID = customer.id;
+      },
+    });
+  },
 };
