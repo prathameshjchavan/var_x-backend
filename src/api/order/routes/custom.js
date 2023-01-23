@@ -2,8 +2,8 @@ module.exports = {
   routes: [
     {
       method: "POST",
-      path: "/orders/place",
-      handler: "order.place",
+      path: "/orders/finalize",
+      handler: "order.finalize",
       config: {
         policies: [],
       },
