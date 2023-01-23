@@ -22,6 +22,9 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       total,
       items,
       transaction,
+      paymentMethod,
+      saveCard,
+      cardSlot,
     } = ctx.request.body;
     let orderCustomer;
 
@@ -50,6 +53,17 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       })
     );
 
+    if (saveCard && ctx.state.user) {
+      let newMethods = [...ctx.state.user.paymentMethods];
+
+      newMethods[cardSlot] = paymentMethod;
+
+      await strapi.query("plugin::users-permissions.user").update({
+        where: { id: orderCustomer },
+        data: { paymentMethods: newMethods },
+      });
+    }
+
     let order = await strapi.entityService.create("api::order.order", {
       data: {
         shippingAddress,
@@ -63,6 +77,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         items,
         user: orderCustomer,
         transaction,
+        paymentMethod,
       },
       populate: "user",
     });
