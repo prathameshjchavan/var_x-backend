@@ -189,4 +189,45 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       }
     }
   },
+  async removeCard(ctx) {
+    const { card } = ctx.request.body;
+    const { stripeID } = ctx.state.user;
+
+    const stripeMethods = await stripe.paymentMethods.list({
+      customer: stripeID,
+      type: "card",
+    });
+
+    const stripeCard = stripeMethods.data.find(
+      (method) => method.card.last4 === card
+    );
+
+    await stripe.paymentMethods.detach(stripeCard.id);
+
+    let newMethods = [...ctx.state.user.paymentMethods];
+    const cardSlot = newMethods.findIndex((method) => method.last4 === card);
+    newMethods[cardSlot] = { brand: "", last4: "" };
+    const newUser = await strapi
+      .query("plugin::users-permissions.user")
+      .update({
+        select: [
+          "id",
+          "name",
+          "username",
+          "email",
+          "provider",
+          "confirmed",
+          "blocked",
+          "createdAt",
+          "updatedAt",
+          "paymentMethods",
+          "contactInfo",
+          "locations",
+        ],
+        where: { id: ctx.state.user.id },
+        data: { paymentMethods: newMethods },
+      });
+
+    return newUser;
+  },
 }));
