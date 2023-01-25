@@ -79,10 +79,17 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         transaction,
         paymentMethod,
       },
-      populate: "user",
     });
 
-    order = await this.sanitizeOutput(order, ctx);
+    const confirmation = await strapi
+      .service("api::order.order")
+      .confirmationEmail(order);
+
+    await strapi.plugins["email"].services.email.send({
+      to: order.billingInfo.email,
+      subject: "VAR_X Order Confirmation",
+      html: confirmation,
+    });
 
     return this.transformResponse(order);
   },

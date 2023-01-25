@@ -158,7 +158,9 @@ module.exports = createCoreService("api::order.order", ({ strapi }) => ({
                                       <tbody>
                                       <tr>
                                                   <td class="centerText"  valign="middle" style="font-family:'Poppins', sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 28px;line-height: 32px;text-align: left;padding-left: 8px;padding-right: 8px; vertical-align: middle;">
-                                                    <p class="o_text o_text-secondary"  style="font-size: 24px;line-height: 32px;color: #99B898;margin-top: 0px;margin-bottom: 0px;">x${item.qty}</p>
+                                                    <p class="o_text o_text-secondary"  style="font-size: 24px;line-height: 32px;color: #99B898;margin-top: 0px;margin-bottom: 0px;">x${
+                                                      item.qty
+                                                    }</p>
                                                   </td>
                                       </tr>
 
@@ -182,7 +184,12 @@ module.exports = createCoreService("api::order.order", ({ strapi }) => ({
 
                                       <tbody><tr>
                                         <td class="imgAuto"  style= "font-family:'Poppins', sans-serif;margin-top: 0px;margin-bottom: 0px;text-align: left;padding-left: 8px;padding-right: 8px;">
-                                                      <img src="http://localhost:1337${item.variant.images[0].url}" width="90" style="width: 90px;" alt="${item.variant.id}">
+                                                      <img src="http://localhost:1337${
+                                                        item.variant.images[0]
+                                                          .url
+                                                      }" width="90" style="width: 90px;" alt="${
+                  item.variant.id
+                }">
                                                   </td>
                                       </tr>
                                     </tbody></table>
@@ -206,7 +213,11 @@ module.exports = createCoreService("api::order.order", ({ strapi }) => ({
 
                                       <tbody><tr>
                                                   <td class="centerText" style="font-family:'Poppins', sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 24px;line-height: 32px;text-align: center;padding-left: 8px;padding-right: 8px;"  align="left">
-                                                    <div class="o_text-secondary" data-color="Secondary" style="margin-bottom:0px;margin-block-start:0;margin-block-end:0;color: #99B898;margin-middle: 0px;">codeblock - L - Male
+                                                    <div class="o_text-secondary" data-color="Secondary" style="margin-bottom:0px;margin-block-start:0;margin-block-end:0;color: #99B898;margin-middle: 0px;">${
+                                                      item.name
+                                                    }${
+                  item.variant.size ? ` - ${item.variant.size}` : ""
+                }${item.variant.style ? ` - ${item.variant.style}` : ""}
                                                   </td>
                                       </tr>
                                     </tbody></table>
@@ -231,7 +242,7 @@ module.exports = createCoreService("api::order.order", ({ strapi }) => ({
 
                                                   <td class="centerText" align="right" width="100px" style="font-family:'Poppins', sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 24px;line-height: 32px;text-align: right;padding-left: 8px;padding-right: 8px;">
                                                       <p class="o_text-secondary" data-color="Secondary" style="color: #99B898;margin-top: 0px;margin-bottom: 0px;">
-                                                        $9.99
+                                                        $${item.variant.price}
                                                   </td>
                                       </tr>
                                     </tbody></table>
@@ -308,22 +319,30 @@ module.exports = createCoreService("api::order.order", ({ strapi }) => ({
                                           <tr>
                                               <td style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898; font-weight: 600;">Shipping</td>
                                               <td style="padding-right: 50px;">&nbsp;</td>
-                                             <td align="right" style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898;line-height: 24px">$8.99</td>
+                                             <td align="right" style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898;line-height: 24px">$${
+                                               order.shippingOption.price
+                                             }</td>
                                           </tr>
                                         <tr>
                                             <td style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898; font-weight: 600;">Subtotal</td>
                                             <td style="padding-right: 50px;">&nbsp;</td>
-                                           <td align="right" style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898;line-height: 24px">$8.99</td>
+                                           <td align="right" style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898;line-height: 24px">$${order.subtotal.toFixed(
+                                             2
+                                           )}</td>
                                         </tr>
                                         <tr>
                                             <td style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898; font-weight: 600;">Tax</td>
                                             <td style="padding-right: 50px;">&nbsp;</td>
-                                           <td align="right" style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898;line-height: 24px">$8.99</td>
+                                           <td align="right" style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898;line-height: 24px">$${order.tax.toFixed(
+                                             2
+                                           )}</td>
                                         </tr>
                                         <tr>
                                             <td style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898; font-weight: 600;">Total</td>
                                             <td style="padding-right: 50px;">&nbsp;</td>
-                                           <td align="right" style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898;line-height: 24px">$29.99</td>
+                                           <td align="right" style="font-family:'Poppins', Arial, Helvetica, sans-serif;font-size: 24px;color: #99B898;line-height: 24px">$${order.total.toFixed(
+                                             2
+                                           )}</td>
                                         </tr>
                     </tbody></table>
                   </div>
@@ -380,11 +399,13 @@ module.exports = createCoreService("api::order.order", ({ strapi }) => ({
 
               <tr>
                 <td data-size="Section Headlines" data-color="Section Headlines" class="Section Headlines" align="left" valign="middle" style="font-family:'Poppins',Arial,Helvetica,sans-serif;color:#99B898;font-size:22px;line-height:28px;font-weight:400;letter-spacing:0px;padding:0px;padding-bottom:25px;">
-                  Zachary Reece <br>
+                  ${order.shippingInfo.name} <br>
 
-                  1234 S Example St <br>
+                  ${order.shippingAddress.street} <br>
 
-                  Wichita, KS 67211 <br>
+                  ${order.shippingAddress.city}, ${
+      order.shippingAddress.state
+    } ${order.shippingAddress.zip} <br>
                 </td>
               </tr>
 
@@ -397,7 +418,9 @@ module.exports = createCoreService("api::order.order", ({ strapi }) => ({
 
               <tr>
                 <td data-size="Section Headlines" data-color="Section Headlines" class="Section Headlines" align="left" valign="middle" style="font-family:'Poppins',Arial,Helvetica,sans-serif;color:#99B898;font-size:22px;line-height:28px;font-weight:400;letter-spacing:0px;padding:0px;padding-bottom:15px;">
-                  Visa **** **** **** 1234
+                  ${order.paymentMethod.brand.toUpperCase()} **** **** **** ${
+      order.paymentMethod.last4
+    }
                 </td>
               </tr>
 
