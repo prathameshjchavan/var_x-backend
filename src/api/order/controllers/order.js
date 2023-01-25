@@ -94,6 +94,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       idempotencyKey,
       storedIntent,
       email,
+      savedCard,
     } = ctx.request.body;
     let serverTotal = 0;
     let unavailable = [];
@@ -156,12 +157,26 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
           intentID: update.id,
         });
       } else {
+        let saved;
+
+        if (savedCard) {
+          const stripeMethods = await stripe.paymentMethods.list({
+            customer: ctx.state.user.stripeID,
+            type: "card",
+          });
+
+          saved = stripeMethods.data.find(
+            (method) => method.card.last4 === savedCard
+          );
+        }
+
         const intent = await stripe.paymentIntents.create(
           {
             amount: total * 100,
             currency: "usd",
             customer: ctx.state.user ? ctx.state.user.stripeID : undefined,
             receipt_email: email,
+            payment_method: saved ? saved.id : undefined,
           },
           { idempotencyKey }
         );
@@ -169,6 +184,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         return this.transformResponse({
           client_secret: intent.client_secret,
           intentID: intent.id,
+          savedMethodID: saved ? saved.id : null,
         });
       }
     }
