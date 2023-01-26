@@ -237,4 +237,11 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
 
     return newUser;
   },
+  async history(ctx) {
+    const orders = await strapi.db.query("api::order.order").findMany({
+      where: { user: ctx.state.user.id },
+    });
+
+    return this.transformResponse({ orders });
+  },
 }));

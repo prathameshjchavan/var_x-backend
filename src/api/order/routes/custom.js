@@ -1,6 +1,14 @@
 module.exports = {
   routes: [
     {
+      method: "GET",
+      path: "/orders/history",
+      handler: "order.history",
+      config: {
+        policies: [],
+      },
+    },
+    {
       method: "POST",
       path: "/orders/removeCard",
       handler: "order.removeCard",
