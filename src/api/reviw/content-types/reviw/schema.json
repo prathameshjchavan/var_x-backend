@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviws",
+  "info": {
+    "singularName": "reviw",
+    "pluralName": "reviws",
+    "displayName": "reviw"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "text": {
+      "type": "text",
+      "required": false
+    },
+    "rating": {
+      "type": "decimal",
+      "required": true
+    },
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product.product",
+      "inversedBy": "reviws"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "reviws"
+    }
+  }
+}

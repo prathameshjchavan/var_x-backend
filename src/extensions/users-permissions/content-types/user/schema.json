@@ -85,6 +85,12 @@
     },
     "stripeID": {
       "type": "string"
+    },
+    "reviws": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::reviw.reviw",
+      "mappedBy": "user"
     }
   }
 }

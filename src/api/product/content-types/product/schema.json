@@ -39,6 +39,15 @@
     },
     "promo": {
       "type": "boolean"
+    },
+    "reviws": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::reviw.reviw",
+      "mappedBy": "product"
+    },
+    "rating": {
+      "type": "decimal"
     }
   }
 }
