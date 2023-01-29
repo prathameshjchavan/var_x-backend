@@ -86,10 +86,10 @@
     "stripeID": {
       "type": "string"
     },
-    "reviws": {
+    "reviews": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::reviw.reviw",
+      "target": "api::review.review",
       "mappedBy": "user"
     }
   }

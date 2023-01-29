@@ -1,10 +1,11 @@
 {
   "kind": "collectionType",
-  "collectionName": "reviws",
+  "collectionName": "reviews",
   "info": {
-    "singularName": "reviw",
-    "pluralName": "reviws",
-    "displayName": "reviw"
+    "singularName": "review",
+    "pluralName": "reviews",
+    "displayName": "Review",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -23,13 +24,13 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::product.product",
-      "inversedBy": "reviws"
+      "inversedBy": "reviews"
     },
     "user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "reviws"
+      "inversedBy": "reviews"
     }
   }
 }
