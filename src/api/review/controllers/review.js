@@ -4,7 +4,7 @@
  * review service
  */
 
-const { createCoreService } = require("@strapi/strapi").factories;
+const { createCoreController } = require("@strapi/strapi").factories;
 const utils = require("@strapi/utils");
 const { sanitize } = utils;
 
@@ -15,7 +15,7 @@ const sanitizeOutput = (review, ctx) => {
   return sanitize.contentAPI.output(review, schema, { auth });
 };
 
-module.exports = createCoreService("api::review.review", ({ strapi }) => ({
+module.exports = createCoreController("api::review.review", ({ strapi }) => ({
   async create(ctx) {
     const { body } = ctx.request;
     let entity;
