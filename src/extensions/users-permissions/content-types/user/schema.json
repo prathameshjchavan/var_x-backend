@@ -91,6 +91,12 @@
       "relation": "oneToMany",
       "target": "api::review.review",
       "mappedBy": "user"
+    },
+    "favorites": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::favorite.favorite",
+      "mappedBy": "user"
     }
   }
 }
