@@ -24,10 +24,12 @@ module.exports = createCoreController(
 
       const entity = await strapi.entityService.create(
         "api::favorite.favorite",
-        { data: body }
+        { data: body, populate: { variant: true } }
       );
+      const { variant } = entity;
+      let sanitizedData = await sanitizeOutput(entity, ctx);
+      sanitizedData.variant = { id: variant.id };
 
-      const sanitizedData = await sanitizeOutput(entity, ctx);
       ctx.send(sanitizedData);
     },
     async delete(ctx) {

@@ -87,12 +87,12 @@ module.exports = (plugin) => {
         filters: {
           user: authUser.id,
         },
-        populate: { product: true },
+        populate: { variant: true },
       }
     );
     user.favorites = favorites.map((favorite) => ({
       id: favorite.id,
-      product: favorite.product.id,
+      variant: favorite.variant.id,
     }));
 
     ctx.body = user;
