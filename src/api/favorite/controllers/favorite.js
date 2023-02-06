@@ -63,9 +63,10 @@ module.exports = createCoreController(
             "api::variant.variant",
             favorite.variant.id,
             {
-              populate: { product: true },
+              populate: { product: true, images: true },
             }
           );
+          variant.images = variant.images.map((image) => ({ url: image.url }));
 
           return { ...favorite, variant };
         })
@@ -73,13 +74,21 @@ module.exports = createCoreController(
 
       favorites = await Promise.all(
         favorites.map(async (favorite) => {
-          const variants = await strapi.db
+          let variants = await strapi.db
             .query("api::variant.variant")
             .findMany({
               where: {
                 product: favorite.variant.product.id,
               },
+              populate: { images: true },
             });
+          variants = variants.map((variant) => {
+            variant.images = variant.images.map((image) => ({
+              url: image.url,
+            }));
+
+            return variant;
+          });
           favorite.variants = variants;
 
           return favorite;
