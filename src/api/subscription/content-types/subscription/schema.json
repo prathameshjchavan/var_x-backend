@@ -1,0 +1,70 @@
+{
+  "kind": "collectionType",
+  "collectionName": "subscriptions",
+  "info": {
+    "singularName": "subscription",
+    "pluralName": "subscriptions",
+    "displayName": "Subscription"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "subscriptions"
+    },
+    "variant": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::variant.variant"
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "subscription"
+    },
+    "frequency": {
+      "type": "enumeration",
+      "enum": [
+        "one_week",
+        "two_weeks",
+        "one_month",
+        "three_months",
+        "six_months",
+        "annually"
+      ]
+    },
+    "last_delivery": {
+      "type": "date"
+    },
+    "next_delivery": {
+      "type": "date"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "paymentMethod": {
+      "type": "json"
+    },
+    "shippingAddress": {
+      "type": "json"
+    },
+    "shippingInfo": {
+      "type": "json"
+    },
+    "billingAddress": {
+      "type": "json"
+    },
+    "billingInfo": {
+      "type": "json"
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

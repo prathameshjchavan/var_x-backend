@@ -97,6 +97,12 @@
       "relation": "oneToMany",
       "target": "api::favorite.favorite",
       "mappedBy": "user"
+    },
+    "subscriptions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::subscription.subscription",
+      "mappedBy": "user"
     }
   }
 }
