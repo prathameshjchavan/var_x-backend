@@ -9,6 +9,63 @@ const stripe = require("stripe")(process.env.STRIPE_SK);
 
 const GUEST_ID = 27;
 
+const frequencies = [
+  {
+    label: "Week",
+    value: "one_week",
+    delivery: () => {
+      let date = new Date();
+      date.setDate(date.getDate() + 7);
+      return date;
+    },
+  },
+  {
+    label: "Two Weeks",
+    value: "two_weeks",
+    delivery: () => {
+      let date = new Date();
+      date.setDate(date.getDate() + 14);
+      return date;
+    },
+  },
+  {
+    label: "Month",
+    value: "one_month",
+    delivery: () => {
+      let date = new Date();
+      date.setMonth(date.getMonth() + 1);
+      return date;
+    },
+  },
+  {
+    label: "Three Months",
+    value: "three_months",
+    delivery: () => {
+      let date = new Date();
+      date.setMonth(date.getMonth() + 3);
+      return date;
+    },
+  },
+  {
+    label: "Six Months",
+    value: "six_months",
+    delivery: () => {
+      let date = new Date();
+      date.setMonth(date.getMonth() + 6);
+      return date;
+    },
+  },
+  {
+    label: "Year",
+    value: "annually",
+    delivery: () => {
+      let date = new Date();
+      date.setMonth(date.getMonth() + 12);
+      return date;
+    },
+  },
+];
+
 module.exports = createCoreController("api::order.order", ({ strapi }) => ({
   async finalize(ctx) {
     const {
@@ -40,6 +97,33 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
           "api::variant.variant",
           clientItem.variant.strapi_id
         );
+
+        if (clientItem.subscription) {
+          const frequency = frequencies.find(
+            (option) => option.label === clientItem.subscription
+          );
+          const data = {
+            data: {
+              user: orderCustomer,
+              variant: clientItem.variant.strapi_id,
+              name: clientItem.name,
+              frequency: frequency.value,
+              last_delivery: new Date().toISOString(),
+              next_delivery: frequency.delivery().toISOString(),
+              quantity: clientItem.qty,
+              paymentMethod,
+              shippingAddress,
+              billingAddress,
+              shippingInfo,
+              billingInfo,
+            },
+          };
+          console.log(data);
+          await strapi.entityService.create(
+            "api::subscription.subscription",
+            data
+          );
+        }
 
         await strapi.entityService.update(
           "api::variant.variant",
