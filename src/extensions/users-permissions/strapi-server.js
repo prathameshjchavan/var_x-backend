@@ -90,10 +90,20 @@ module.exports = (plugin) => {
         populate: { variant: true },
       }
     );
+    const subscriptions = await strapi.entityService.findMany(
+      "api::subscription.subscription",
+      {
+        filters: {
+          user: authUser.id,
+        },
+        populate: { variant: true },
+      }
+    );
     user.favorites = favorites.map((favorite) => ({
       id: favorite.id,
       variant: favorite.variant.id,
     }));
+    user.subscriptions = subscriptions;
 
     ctx.body = user;
   };
