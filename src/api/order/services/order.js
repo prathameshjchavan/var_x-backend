@@ -501,4 +501,62 @@ email at <a href="mailto:support@var-x.com" style="color: #99B898; text-decorati
 </body></html>
 `;
   },
+  async frequency() {
+    return [
+      {
+        label: "Week",
+        value: "one_week",
+        delivery: () => {
+          let date = new Date();
+          date.setDate(date.getDate() + 7);
+          return date;
+        },
+      },
+      {
+        label: "Two Weeks",
+        value: "two_weeks",
+        delivery: () => {
+          let date = new Date();
+          date.setDate(date.getDate() + 14);
+          return date;
+        },
+      },
+      {
+        label: "Month",
+        value: "one_month",
+        delivery: () => {
+          let date = new Date();
+          date.setMonth(date.getMonth() + 1);
+          return date;
+        },
+      },
+      {
+        label: "Three Months",
+        value: "three_months",
+        delivery: () => {
+          let date = new Date();
+          date.setMonth(date.getMonth() + 3);
+          return date;
+        },
+      },
+      {
+        label: "Six Months",
+        value: "six_months",
+        delivery: () => {
+          let date = new Date();
+          date.setMonth(date.getMonth() + 6);
+          return date;
+        },
+      },
+      {
+        label: "Year",
+        value: "annually",
+        delivery: () => {
+          let date = new Date();
+          date.setMonth(date.getMonth() + 12);
+          return date;
+        },
+      },
+    ];
+  },
 }));
