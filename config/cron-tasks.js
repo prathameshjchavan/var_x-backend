@@ -6,24 +6,27 @@ module.exports = {
       "api::subscription.subscription",
       {
         filters: {
-          next_delivery: new Date().toISOString(),
+          next_delivery: new Date().toISOString().split("T")[0],
         },
         populate: { user: true, variant: true },
       }
     );
-    subscriptions = subscriptions.map(async (subscription) => {
-      const variant = await strapi.entityService.findOne(
-        "api::variant.variant",
-        subscription.variant.id,
-        {
-          populate: { product: true },
-        }
-      );
+    subscriptions = await Promise.all(
+      subscriptions.map(async (subscription) => {
+        let variant = await strapi.entityService.findOne(
+          "api::variant.variant",
+          subscription.variant.id,
+          {
+            populate: { images: true },
+          }
+        );
+        variant.images = variant.images.map((image) => ({ url: image.url }));
 
-      subscription.variant = variant;
+        subscription.variant = variant;
 
-      return subscription;
-    });
+        return subscription;
+      })
+    );
 
     await Promise.allSettled(
       subscriptions.map(async (subscription) => {
@@ -53,6 +56,7 @@ module.exports = {
               billingInfo: subscription.billingInfo,
               shippingOption: { label: "subscription", price: 0 },
               subtotal: subscription.variant.price,
+              total: subscription.variant.price * 1.075,
               tax: subscription.variant.price * 0.075,
               items: [
                 {
@@ -60,7 +64,6 @@ module.exports = {
                   name: subscription.name,
                   qty: subscription.quantity,
                   stock: subscription.variant.quantity,
-                  product: subscription.variant.product,
                 },
               ],
               transaction: paymentIntent.id,
@@ -90,7 +93,9 @@ module.exports = {
             "api::subscription.subscription",
             subscription.id,
             {
-              data: { next_delivery: frequency.delivery() },
+              data: {
+                next_delivery: frequency.delivery().toISOString().split("T")[0],
+              },
             }
           );
         } catch (error) {

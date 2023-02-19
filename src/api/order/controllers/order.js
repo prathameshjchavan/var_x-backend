@@ -52,8 +52,8 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
               variant: clientItem.variant.strapi_id,
               name: clientItem.name,
               frequency: frequency.value,
-              last_delivery: new Date().toISOString(),
-              next_delivery: frequency.delivery().toISOString(),
+              last_delivery: new Date().toISOString().split("T")[0],
+              next_delivery: frequency.delivery().toISOString().split("T")[0],
               quantity: clientItem.qty,
               paymentMethod,
               shippingAddress,
@@ -62,7 +62,6 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
               billingInfo,
             },
           };
-          console.log(data);
           await strapi.entityService.create(
             "api::subscription.subscription",
             data
