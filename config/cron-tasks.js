@@ -95,6 +95,7 @@ module.exports = {
             {
               data: {
                 next_delivery: frequency.delivery().toISOString().split("T")[0],
+                last_delivery: new Date().toISOString().split("T")[0],
               },
             }
           );
