@@ -40,7 +40,13 @@ module.exports = {
 
         try {
           const paymentIntent = await stripe.paymentIntents.create({
-            amount: Math.round(subscription.variant.price * 1.075 * 100),
+            amount: Math.round(
+              (
+                subscription.variant.price *
+                subscription.quantity *
+                1.075
+              ).toFixed(2) * 100
+            ),
             currency: "usd",
             customer: subscription.user.stripeID,
             payment_method: paymentMethod.id,
@@ -55,9 +61,19 @@ module.exports = {
               shippingInfo: subscription.shippingInfo,
               billingInfo: subscription.billingInfo,
               shippingOption: { label: "subscription", price: 0 },
-              subtotal: subscription.variant.price,
-              total: subscription.variant.price * 1.075,
-              tax: subscription.variant.price * 0.075,
+              subtotal: (
+                subscription.variant.price * subscription.quantity
+              ).toFixed(2),
+              total: (
+                subscription.variant.price *
+                subscription.quantity *
+                1.075
+              ).toFixed(2),
+              tax: (
+                subscription.variant.price *
+                subscription.quantity *
+                0.075
+              ).toFixed(2),
               items: [
                 {
                   variant: subscription.variant,
