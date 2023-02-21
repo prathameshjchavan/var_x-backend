@@ -23,12 +23,6 @@
       "relation": "oneToOne",
       "target": "api::variant.variant"
     },
-    "orders": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::order.order",
-      "mappedBy": "subscription"
-    },
     "frequency": {
       "type": "enumeration",
       "enum": [

@@ -65,12 +65,6 @@
     "paymentMethod": {
       "type": "json",
       "required": true
-    },
-    "subscription": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::subscription.subscription",
-      "inversedBy": "orders"
     }
   }
 }

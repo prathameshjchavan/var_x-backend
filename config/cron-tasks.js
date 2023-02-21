@@ -37,6 +37,12 @@ module.exports = {
         const paymentMethod = paymentMethods.data.find(
           (method) => method.card.last4 === subscription.paymentMethod.last4
         );
+        const frequencies = await strapi
+          .service("api::order.order")
+          .frequency();
+        const frequency = frequencies.find(
+          (option) => option.value === subscription.frequency
+        );
 
         try {
           const paymentIntent = await stripe.paymentIntents.create({
@@ -80,30 +86,23 @@ module.exports = {
                   name: subscription.name,
                   qty: subscription.quantity,
                   stock: subscription.variant.quantity,
+                  subscription: frequency.label,
                 },
               ],
               transaction: paymentIntent.id,
               paymentMethod: subscription.paymentMethod,
               user: subscription.user.id,
-              subscription: subscription.id,
             },
           });
           const confirmation = await strapi
             .service("api::order.order")
             .confirmationEmail(order);
-          const frequencies = await strapi
-            .service("api::order.order")
-            .frequency();
 
           await strapi.plugins["email"].services.email.send({
             to: subscription.billingInfo.email,
             subject: "VAR_X Order Confirmation",
             html: confirmation,
           });
-
-          const frequency = frequencies.find(
-            (option) => option.value === subscription.frequency
-          );
 
           await strapi.entityService.update(
             "api::subscription.subscription",
