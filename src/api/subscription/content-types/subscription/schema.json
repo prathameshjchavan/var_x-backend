@@ -60,6 +60,13 @@
     },
     "name": {
       "type": "string"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "active",
+        "inactive"
+      ]
     }
   }
 }

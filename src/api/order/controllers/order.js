@@ -52,6 +52,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
               variant: clientItem.variant.strapi_id,
               name: clientItem.name,
               frequency: frequency.value,
+              status: "active",
               last_delivery: new Date().toISOString().split("T")[0],
               next_delivery: frequency.delivery().toISOString().split("T")[0],
               quantity: clientItem.qty,
