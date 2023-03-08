@@ -272,4 +272,13 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
 
     return this.transformResponse({ orders });
   },
+  async savePaymentMethod(ctx) {
+    const { paymentMethodId, customerId } = ctx.request.body;
+
+    const paymentMethod = await stripe.paymentMethods.attach(paymentMethodId, {
+      customer: customerId,
+    });
+
+    ctx.send(paymentMethod);
+  },
 }));

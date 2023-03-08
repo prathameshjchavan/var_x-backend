@@ -11,14 +11,14 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@strapi/plugin-graphql": "^4.5.4",
-    "@strapi/plugin-i18n": "^4.6.2",
-    "@strapi/plugin-users-permissions": "^4.6.2",
-    "@strapi/provider-email-sendgrid": "^4.5.4",
-    "@strapi/strapi": "^4.6.2",
+    "@strapi/plugin-graphql": "^4.7.1",
+    "@strapi/plugin-i18n": "^4.7.1",
+    "@strapi/plugin-users-permissions": "^4.7.1",
+    "@strapi/provider-email-sendgrid": "^4.7.1",
+    "@strapi/strapi": "^4.7.1",
     "better-sqlite3": "^8.1.0",
-    "pg": "^8.8.0",
-    "stripe": "^11.7.0"
+    "pg": "^8.9.0",
+    "stripe": "^11.13.0"
   },
   "author": {
     "name": "A Strapi developer"

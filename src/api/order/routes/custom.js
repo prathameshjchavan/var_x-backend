@@ -32,5 +32,13 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: "POST",
+      path: "/orders/savePaymentMethod",
+      handler: "order.savePaymentMethod",
+      config: {
+        policies: [],
+      },
+    },
   ],
 };
