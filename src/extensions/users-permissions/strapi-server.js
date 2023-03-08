@@ -14,11 +14,19 @@ module.exports = (plugin) => {
       return (ctx.response.status = 401);
     }
 
-    const { id, contactInfo, locations } = ctx.state.user;
-    const { details, detailSlot, location, locationSlot } = ctx.request.body;
+    const { id, contactInfo, locations, paymentMethods } = ctx.state.user;
+    const {
+      details,
+      detailSlot,
+      location,
+      locationSlot,
+      paymentMethod,
+      paymentMethodSlot,
+    } = ctx.request.body;
 
     let newInfo = [...contactInfo];
     let newLocations = [...locations];
+    let newPaymentMethods = [...paymentMethods];
 
     if (typeof details !== "undefined" && typeof detailSlot !== "undefined") {
       newInfo[detailSlot] = details;
@@ -39,10 +47,22 @@ module.exports = (plugin) => {
     ) {
       newLocations[locationSlot] = { street: "", zip: "", city: "", state: "" };
     }
+    if (
+      typeof paymentMethod !== "undefined" &&
+      typeof paymentMethodSlot !== "undefined"
+    ) {
+      newPaymentMethods[paymentMethodSlot] = paymentMethod;
+    } else if (
+      typeof paymentMethod === "undefined" &&
+      typeof paymentMethodSlot !== "undefined"
+    ) {
+      newPaymentMethods[paymentMethodSlot] = { brand: "", last4: "" };
+    }
 
     const updatedData = {
       contactInfo: newInfo,
       locations: newLocations,
+      paymentMethods: newPaymentMethods,
     };
 
     const response = await strapi
