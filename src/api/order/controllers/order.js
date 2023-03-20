@@ -172,7 +172,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
 
     if (
       shippingValid === undefined ||
-      (serverTotal * 1.075 + shippingValid.price).toFixed(2) !== total
+      ((serverTotal + shippingValid.price) * 1.075).toFixed(2) !== total
     ) {
       return ctx.badRequest("", { error: "Invalid Cart" });
     } else if (unavailable.length > 0) {
